@@ -23,10 +23,85 @@
 
 /* ── Header ── */
 header {
+  position: relative;
   padding: 2rem 2rem 1.75rem;
   border-bottom: 1px solid var(--border);
   text-align: center;
   background: linear-gradient(180deg, rgba(124, 106, 247, 0.06) 0%, transparent 100%);
+}
+
+.login-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  margin-top: 0;
+}
+
+/* ── Auth splash ── */
+.auth-splash {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.auth-splash-icon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b7cf8 0%, #c4b5fd 100%);
+  color: #fff;
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 8px 32px rgba(124, 106, 247, 0.35);
+}
+
+.auth-splash h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #8b7cf8 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.auth-splash p {
+  color: var(--text-muted);
+  margin: 0 0 1rem;
+  max-width: 420px;
+  font-size: 0.95rem;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.login-form .search-input {
+  padding: 0.65rem 0.9rem;
+}
+
+.login-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-actions .btn-primary {
+  margin-top: 0;
 }
 
 header h1 {

@@ -1,2 +1,9 @@
 node_modules
 dist
+.env
+.env.local
+.vercel
+supabase/.temp
+supabase/.branches
+.env*.local
+.claude

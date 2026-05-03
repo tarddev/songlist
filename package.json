@@ -5,10 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:vercel": "vercel dev",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
     "@tanstack/react-table": "^8.20.5",
     "papaparse": "^5.4.1",
     "react": "^18.3.1",
@@ -16,6 +21,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
+    "supabase": "^1.200.3",
     "vite": "^6.3.4"
   }
 }
