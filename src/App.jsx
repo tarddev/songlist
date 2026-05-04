@@ -1,23 +1,106 @@
-import { useState, useMemo, useEffect } from 'react'
-import Papa from 'papaparse'
+import { useState, useEffect, useCallback } from 'react'
 import SongTable from './components/SongTable'
-import songsCsv from './songs.csv?raw'
+import SongCreator from './components/SongCreator'
+import SongImportExport from './components/SongImportExport'
+import PollCreator from './components/PollCreator'
+import PollDashboard from './components/PollDashboard'
+import PollVoteView from './components/PollVoteView'
 import './App.css'
 
 export default function App() {
+  const path = typeof window !== 'undefined' ? window.location.pathname : '/'
+  if (path.startsWith('/poll/')) {
+    const id = decodeURIComponent(path.slice('/poll/'.length).replace(/\/$/, ''))
+    if (id) return <PollVoteView id={id} />
+  }
+  return <AppShell />
+}
+
+function AppShell() {
   const [globalFilter, setGlobalFilter] = useState('')
   const [view, setView] = useState('table')
   const [passcode, setPasscode] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [data, setData] = useState([])
+  const [songsLoading, setSongsLoading] = useState(true)
+  const [songsError, setSongsError] = useState('')
+  const [activePoll, setActivePoll] = useState(null)
+  const [activePollLoading, setActivePollLoading] = useState(false)
+  const [activePollError, setActivePollError] = useState('')
 
-  const data = useMemo(() => {
-    const result = Papa.parse(songsCsv.trim(), {
-      header: true,
-      skipEmptyLines: true,
-      transformHeader: (h) => h.trim().toLowerCase(),
+  const refreshActivePoll = useCallback(async () => {
+    setActivePollLoading(true)
+    setActivePollError('')
+    try {
+      const res = await fetch('/api/polls/active')
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || 'Failed to load active poll')
+      }
+      const body = await res.json()
+      setActivePoll(body.active || null)
+    } catch (e) {
+      setActivePollError(e.message || 'Failed to load active poll')
+    } finally {
+      setActivePollLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (view === 'authenticated') refreshActivePoll()
+  }, [view, refreshActivePoll])
+
+  useEffect(() => {
+    fetch('/api/songs')
+      .then(async (r) => {
+        const body = await r.json().catch(() => ({}))
+        if (!r.ok) throw new Error(body.error || 'Failed to load songs')
+        return body
+      })
+      .then((body) => setData(body.songs || []))
+      .catch((e) => setSongsError(e.message || 'Failed to load songs'))
+      .finally(() => setSongsLoading(false))
+  }, [])
+
+  const handleSongSave = useCallback(async (id, fields) => {
+    const res = await fetch(`/api/songs/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields),
     })
-    return result.data
+    const body = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(body.error || 'Failed to save song')
+    setData((prev) => prev.map((s) => (s.id === id ? body.song : s)))
+  }, [])
+
+  const handleSongDelete = useCallback(async (id) => {
+    const res = await fetch(`/api/songs/${encodeURIComponent(id)}`, { method: 'DELETE' })
+    const body = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(body.error || 'Failed to delete song')
+    setData((prev) => prev.filter((s) => s.id !== id))
+  }, [])
+
+  const handleSongCreate = useCallback(async (fields) => {
+    const res = await fetch('/api/songs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(body.error || 'Failed to create song')
+    setData((prev) => [body.song, ...prev])
+  }, [])
+
+  const handleSongsReplace = useCallback(async (rows) => {
+    const res = await fetch('/api/songs', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songs: rows }),
+    })
+    const body = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(body.error || 'Failed to import songs')
+    setData(body.songs || [])
   }, [])
 
   useEffect(() => {
@@ -59,14 +142,61 @@ export default function App() {
   if (view === 'authenticated') {
     return (
       <div className="app">
-        <div className="auth-splash">
-          <div className="auth-splash-icon">✓</div>
-          <h1>I am authenticated</h1>
-          <p>Passcode verified server-side and signed session cookie set.</p>
-          <button className="btn btn-secondary" onClick={handleLogout}>
+        <header>
+          <button className="btn btn-secondary login-btn" onClick={handleLogout}>
             Log out
           </button>
-        </div>
+          <h1>Lemon's Song List</h1>
+        </header>
+        <main>
+          {activePollLoading && !activePoll ? (
+            <p className="poll-loading">Loading poll state…</p>
+          ) : activePollError ? (
+            <p className="error">{activePollError}</p>
+          ) : activePoll ? (
+            <PollDashboard
+              poll={activePoll}
+              onClosed={() => { setActivePoll(null); refreshActivePoll() }}
+            />
+          ) : (
+            <PollCreator onCreated={() => refreshActivePoll()} />
+          )}
+
+          <section className="songs-manage">
+            <div className="songs-manage-header">
+              <h2>Manage songs</h2>
+              <span className="record-count">
+                {songsLoading ? 'Loading…' : `${data.length} songs`}
+              </span>
+            </div>
+            <SongCreator onCreate={handleSongCreate} />
+            <SongImportExport data={data} onReplace={handleSongsReplace} />
+            <div className="table-controls">
+              <div className="search-wrapper">
+                <span className="search-icon">⌕</span>
+                <input
+                  type="search"
+                  placeholder="Search songs, artists, genres…"
+                  value={globalFilter}
+                  onChange={(e) => setGlobalFilter(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+            </div>
+            {songsError ? (
+              <p className="error">{songsError}</p>
+            ) : (
+              <SongTable
+                data={data}
+                globalFilter={globalFilter}
+                onGlobalFilterChange={setGlobalFilter}
+                editable
+                onSave={handleSongSave}
+                onDelete={handleSongDelete}
+              />
+            )}
+          </section>
+        </main>
       </div>
     )
   }
@@ -132,10 +262,16 @@ export default function App() {
                 autoFocus
               />
             </div>
-            <span className="record-count">{data.length} songs</span>
+            <span className="record-count">
+              {songsLoading ? 'Loading…' : `${data.length} songs`}
+            </span>
           </div>
 
-          <SongTable data={data} globalFilter={globalFilter} onGlobalFilterChange={setGlobalFilter} />
+          {songsError ? (
+            <p className="error">{songsError}</p>
+          ) : (
+            <SongTable data={data} globalFilter={globalFilter} onGlobalFilterChange={setGlobalFilter} />
+          )}
         </div>
       </main>
     </div>

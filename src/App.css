@@ -403,6 +403,492 @@ tbody tr:hover td {
   font-size: 0.95rem;
 }
 
+/* ── Polls ── */
+.poll-creator,
+.poll-dashboard {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.poll-creator h2,
+.poll-dashboard-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.poll-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.poll-field small {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.poll-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.poll-option-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.poll-option-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.poll-option-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.poll-option-grid .search-input {
+  padding-left: 0.9rem;
+}
+
+.poll-closes-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.poll-closes-row .search-input {
+  flex: 1;
+  min-width: 180px;
+  padding-left: 0.9rem;
+}
+
+.poll-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.poll-dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.poll-meta {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.poll-share {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.poll-share .search-input {
+  flex: 1;
+  padding-left: 0.9rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+}
+
+.poll-tally-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.poll-tally-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.poll-tally-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.poll-tally-label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.poll-tally-count {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.poll-tally-bar {
+  height: 8px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.poll-tally-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8b7cf8 0%, #c4b5fd 100%);
+  transition: width 0.3s ease;
+}
+
+.poll-tally-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.poll-tally-notes {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.genre-tag {
+  background: rgba(124, 106, 247, 0.15);
+  color: #a594f9;
+}
+
+/* ── Song management (authenticated) ── */
+.songs-manage {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.songs-manage-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.songs-manage-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.song-edit-input {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.song-add-toggle {
+  align-self: flex-start;
+}
+
+.song-io {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.song-creator {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.song-creator-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.song-creator-grid .search-input {
+  padding-left: 0.9rem;
+}
+
+.song-creator-actions {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.song-creator-error {
+  margin: 0;
+  text-align: left;
+}
+
+.song-actions {
+  display: flex;
+  gap: 0.4rem;
+  white-space: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.song-actions .btn-primary,
+.song-creator-actions .btn-primary {
+  margin-top: 0;
+}
+
+td.song-actions-cell {
+  width: 1%;
+  text-align: right;
+}
+
+.song-delete-btn:hover {
+  color: var(--error-text);
+  border-color: var(--error-border);
+}
+
+.song-row-editing td {
+  background: rgba(124, 106, 247, 0.04);
+}
+
+.song-row-error-cell {
+  padding: 0 1rem 0.75rem !important;
+  border-top: 0 !important;
+}
+
+.song-row-error {
+  color: var(--error-text);
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* ── Public vote view ── */
+.poll-vote-view {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.poll-vote-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #8b7cf8 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.poll-status-pill {
+  display: inline-block;
+  margin: 0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.poll-status-pill.closed {
+  color: var(--error-text);
+  background: var(--error-bg);
+  border-color: var(--error-border);
+}
+
+.poll-status-pill.voted {
+  color: #a594f9;
+  background: rgba(124, 106, 247, 0.12);
+  border-color: rgba(124, 106, 247, 0.3);
+}
+
+.poll-vote-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.poll-vote-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.poll-vote-card.is-choice {
+  border-color: var(--accent);
+  background: rgba(124, 106, 247, 0.06);
+}
+
+.poll-vote-card-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.poll-vote-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.poll-vote-card-title {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.poll-vote-card-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.poll-vote-card-count {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.poll-your-vote {
+  color: #a594f9;
+}
+
+.poll-vote-footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.poll-loading {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem 1rem;
+}
+
+/* ── Modal ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 14, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1000;
+  animation: modal-fade-in 0.12s ease-out;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  animation: modal-pop-in 0.14s ease-out;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.modal-message {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.modal-actions .btn {
+  margin-top: 0;
+}
+
+.btn-danger {
+  background: var(--error-text);
+  color: #1a0d0d;
+}
+
+.btn-danger:hover {
+  background: #fca5a5;
+}
+
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* ── Responsive ── */
 @media (max-width: 600px) {
   main {
@@ -424,5 +910,10 @@ tbody tr:hover td {
 
   .record-count {
     margin-left: 0;
+  }
+
+  .poll-option-grid,
+  .song-creator-grid {
+    grid-template-columns: 1fr;
   }
 }

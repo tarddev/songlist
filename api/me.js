@@ -1,6 +1,6 @@
 import { readSessionFromCookies } from '../lib/session.js'
 
-export default function handler(req, res) {
-  const session = readSessionFromCookies(req.headers.cookie)
+export default async function handler(req, res) {
+  const session = await readSessionFromCookies(req.headers.cookie)
   return res.status(200).json({ authenticated: Boolean(session) })
 }
