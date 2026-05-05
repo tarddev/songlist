@@ -891,6 +891,10 @@ td.song-actions-cell {
   flex-shrink: 0;
 }
 
+.poll-vote-card-actions .btn {
+  margin-top: 0;
+}
+
 .nomination-badge {
   margin-left: 0.45rem;
   font-size: 0.7rem;

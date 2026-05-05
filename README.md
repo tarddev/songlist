@@ -1,0 +1,1 @@
+Pretty sure this is overengineered at that this point and should be two projects: the polling system and a flat site that consumes an updated csv Kaneko5Smile
