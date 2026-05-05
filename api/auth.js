@@ -1,9 +1,14 @@
 import { getSupabaseAdmin } from '../lib/supabase.js'
-import { signSession, buildSetCookie, getCurrentSessionEpoch } from '../lib/session.js'
+import { signSession, buildSetCookie, buildClearCookie, getCurrentSessionEpoch } from '../lib/session.js'
 
 export default async function handler(req, res) {
+  if (req.method === 'DELETE') {
+    res.setHeader('Set-Cookie', buildClearCookie())
+    return res.status(200).json({ authenticated: false })
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST')
+    res.setHeader('Allow', 'POST, DELETE')
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
