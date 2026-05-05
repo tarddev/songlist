@@ -1,4 +1,4 @@
-export const SONG_HEADERS = ['song', 'artist', 'genre', 'notes']
+export const SONG_HEADERS = ['song', 'artist', 'genre', 'mood', 'language']
 
 function escapeField(v) {
   const s = v == null ? '' : String(v)
@@ -50,7 +50,7 @@ export function parseSongsCSV(text) {
   const header = cells[0].map((h) => h.trim().toLowerCase())
   const idx = SONG_HEADERS.map((h) => header.indexOf(h))
   if (idx.some((i) => i === -1)) {
-    throw new Error('CSV must include columns: song, artist, genre, notes')
+    throw new Error('CSV must include columns: song, artist, genre, mood, language')
   }
 
   const out = []

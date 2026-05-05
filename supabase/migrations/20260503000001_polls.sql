@@ -22,12 +22,14 @@ create table if not exists public.poll_options (
   song text,
   artist text,
   genre text,
-  notes text,
+  mood text,
+  language text,
   primary key (poll_id, option_index),
   constraint poll_options_index_positive check (option_index >= 1),
   constraint poll_options_at_least_one_field check (
     coalesce(nullif(btrim(song), ''), nullif(btrim(artist), ''),
-             nullif(btrim(genre), ''), nullif(btrim(notes), '')) is not null
+             nullif(btrim(genre), ''), nullif(btrim(mood), ''),
+             nullif(btrim(language), '')) is not null
   )
 );
 
@@ -91,14 +93,15 @@ begin
 
   for opt in select * from jsonb_array_elements(p_options) loop
     i := i + 1;
-    insert into public.poll_options (poll_id, option_index, song, artist, genre, notes)
+    insert into public.poll_options (poll_id, option_index, song, artist, genre, mood, language)
     values (
       new_id,
       i,
-      nullif(btrim(coalesce(opt->>'song',   '')), ''),
-      nullif(btrim(coalesce(opt->>'artist', '')), ''),
-      nullif(btrim(coalesce(opt->>'genre',  '')), ''),
-      nullif(btrim(coalesce(opt->>'notes',  '')), '')
+      nullif(btrim(coalesce(opt->>'song',     '')), ''),
+      nullif(btrim(coalesce(opt->>'artist',   '')), ''),
+      nullif(btrim(coalesce(opt->>'genre',    '')), ''),
+      nullif(btrim(coalesce(opt->>'mood',     '')), ''),
+      nullif(btrim(coalesce(opt->>'language', '')), '')
     );
   end loop;
 

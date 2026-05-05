@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const EMPTY = { song: '', artist: '', genre: '', notes: '' }
+const EMPTY = { song: '', artist: '', genre: '', mood: '', language: '' }
 
 export default function SongCreator({ onCreate }) {
   const [open, setOpen] = useState(false)
@@ -28,9 +28,10 @@ export default function SongCreator({ onCreate }) {
       song: fields.song.trim(),
       artist: fields.artist.trim(),
       genre: fields.genre.trim(),
-      notes: fields.notes.trim(),
+      mood: fields.mood.trim(),
+      language: fields.language.trim(),
     }
-    if (!trimmed.song && !trimmed.artist && !trimmed.genre && !trimmed.notes) {
+    if (!trimmed.song && !trimmed.artist && !trimmed.genre && !trimmed.mood && !trimmed.language) {
       setError('At least one field must be non-empty')
       return
     }
@@ -89,9 +90,17 @@ export default function SongCreator({ onCreate }) {
         <input
           type="text"
           className="search-input"
-          placeholder="Notes"
-          value={fields.notes}
-          onChange={(e) => update('notes', e.target.value)}
+          placeholder="Mood"
+          value={fields.mood}
+          onChange={(e) => update('mood', e.target.value)}
+          disabled={submitting}
+        />
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Language"
+          value={fields.language}
+          onChange={(e) => update('language', e.target.value)}
           disabled={submitting}
         />
       </div>

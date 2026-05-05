@@ -20,7 +20,7 @@ function formatRemaining(closesAt) {
 function optionLabel(o) {
   const parts = [o.song, o.artist].filter(Boolean)
   if (parts.length) return parts.join(' — ')
-  return o.genre || o.notes || `Option ${o.optionIndex}`
+  return o.genre || o.mood || o.language || `Option ${o.optionIndex}`
 }
 
 export default function PollDashboard({ poll: initialPoll, onClosed }) {
@@ -39,6 +39,32 @@ export default function PollDashboard({ poll: initialPoll, onClosed }) {
   const totalVotes = useMemo(() => {
     return Object.values(poll.tallies || {}).reduce((a, b) => a + Number(b || 0), 0)
   }, [poll.tallies])
+
+  const nominationCount = useMemo(() => {
+    return (poll.options || []).filter((o) => o.nominatedAt != null).length
+  }, [poll.options])
+
+  const [removing, setRemoving] = useState(null) // optionIndex being removed
+
+  async function removeOption(optionIndex) {
+    setRemoving(optionIndex)
+    try {
+      const res = await fetch(
+        `/api/polls/${encodeURIComponent(poll.id)}/options/${optionIndex}`,
+        { method: 'DELETE' },
+      )
+      if (!res.ok) return
+      setPoll((p) => {
+        if (!p) return p
+        const options = p.options.filter((o) => o.optionIndex !== optionIndex)
+        const tallies = { ...p.tallies }
+        delete tallies[optionIndex]
+        return { ...p, options, tallies }
+      })
+    } catch { /* ignore */ } finally {
+      setRemoving(null)
+    }
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -100,6 +126,7 @@ export default function PollDashboard({ poll: initialPoll, onClosed }) {
         <div className="poll-meta">
           <span>{totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}</span>
           {remaining && <span>· {remaining}</span>}
+          <span>· {nominationCount} / 10 nominations</span>
         </div>
       </div>
 
@@ -123,16 +150,30 @@ export default function PollDashboard({ poll: initialPoll, onClosed }) {
           return (
             <li key={o.optionIndex} className="poll-tally-row">
               <div className="poll-tally-top">
-                <span className="poll-tally-label">{optionLabel(o)}</span>
-                <span className="poll-tally-count">{count} · {pct}%</span>
+                <span className="poll-tally-label">
+                  {optionLabel(o)}
+                  {o.nominatedAt && <span className="nomination-badge">nominated</span>}
+                </span>
+                <div className="poll-tally-top-right">
+                  <span className="poll-tally-count">{count} · {pct}%</span>
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    onClick={() => removeOption(o.optionIndex)}
+                    disabled={removing === o.optionIndex}
+                  >
+                    {removing === o.optionIndex ? '…' : 'Remove'}
+                  </button>
+                </div>
               </div>
               <div className="poll-tally-bar">
                 <div className="poll-tally-bar-fill" style={{ width: `${pct}%` }} />
               </div>
-              {(o.genre || o.notes) && (
+              {(o.genre || o.mood || o.language) && (
                 <div className="poll-tally-sub">
                   {o.genre && <span className="genre-tag">{o.genre}</span>}
-                  {o.notes && <span className="poll-tally-notes">{o.notes}</span>}
+                  {o.mood && <span className="poll-tally-meta">{o.mood}</span>}
+                  {o.language && <span className="poll-tally-meta">{o.language}</span>}
                 </div>
               )}
             </li>

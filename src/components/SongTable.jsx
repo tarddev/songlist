@@ -38,7 +38,7 @@ const SortIcon = ({ column }) => {
   )
 }
 
-const EMPTY_DRAFT = { song: '', artist: '', genre: '', notes: '' }
+const EMPTY_DRAFT = { song: '', artist: '', genre: '', mood: '', language: '' }
 
 export default function SongTable({
   data,
@@ -62,7 +62,8 @@ export default function SongTable({
       song: row.song ?? '',
       artist: row.artist ?? '',
       genre: row.genre ?? '',
-      notes: row.notes ?? '',
+      mood: row.mood ?? '',
+      language: row.language ?? '',
     })
     setRowError('')
   }
@@ -79,9 +80,10 @@ export default function SongTable({
       song: draft.song.trim(),
       artist: draft.artist.trim(),
       genre: draft.genre.trim(),
-      notes: draft.notes.trim(),
+      mood: draft.mood.trim(),
+      language: draft.language.trim(),
     }
-    if (!trimmed.song && !trimmed.artist && !trimmed.genre && !trimmed.notes) {
+    if (!trimmed.song && !trimmed.artist && !trimmed.genre && !trimmed.mood && !trimmed.language) {
       setRowError('At least one field must be non-empty')
       return
     }
@@ -142,10 +144,13 @@ export default function SongTable({
           )
         },
       }),
-      columnHelper.accessor('notes', {
-        header: 'Notes',
-        cell: (info) => <span className="notes-cell">{info.getValue()}</span>,
-        enableSorting: false,
+      columnHelper.accessor('mood', {
+        header: 'Mood',
+        cell: (info) => <span className="meta-cell">{info.getValue()}</span>,
+      }),
+      columnHelper.accessor('language', {
+        header: 'Language',
+        cell: (info) => <span className="meta-cell">{info.getValue()}</span>,
       }),
     ]
 
@@ -175,7 +180,7 @@ export default function SongTable({
   })
 
   const filteredCount = table.getRowModel().rows.length
-  const colSpan = editable ? 5 : 4
+  const colSpan = editable ? 6 : 5
 
   return (
     <>
@@ -194,7 +199,6 @@ export default function SongTable({
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
                     className={header.column.getCanSort() ? 'sortable' : ''}
-                    style={{ width: header.column.id === 'notes' ? '40%' : undefined }}
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                     <SortIcon column={header.column} />
@@ -213,7 +217,7 @@ export default function SongTable({
                   return (
                     <Fragment key={row.id}>
                       <tr className="song-row-editing">
-                        {['song', 'artist', 'genre', 'notes'].map((field) => (
+                        {['song', 'artist', 'genre', 'mood', 'language'].map((field) => (
                           <td key={field}>
                             <input
                               type="text"

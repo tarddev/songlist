@@ -13,12 +13,13 @@ function isNonEmpty(v) {
 function normalizeOption(opt) {
   if (!opt || typeof opt !== 'object') return null
   const out = {
-    song:   typeof opt.song   === 'string' ? opt.song.trim()   : '',
-    artist: typeof opt.artist === 'string' ? opt.artist.trim() : '',
-    genre:  typeof opt.genre  === 'string' ? opt.genre.trim()  : '',
-    notes:  typeof opt.notes  === 'string' ? opt.notes.trim()  : '',
+    song:     typeof opt.song     === 'string' ? opt.song.trim()     : '',
+    artist:   typeof opt.artist   === 'string' ? opt.artist.trim()   : '',
+    genre:    typeof opt.genre    === 'string' ? opt.genre.trim()    : '',
+    mood:     typeof opt.mood     === 'string' ? opt.mood.trim()     : '',
+    language: typeof opt.language === 'string' ? opt.language.trim() : '',
   }
-  if (!out.song && !out.artist && !out.genre && !out.notes) return null
+  if (!out.song && !out.artist && !out.genre && !out.mood && !out.language) return null
   return out
 }
 

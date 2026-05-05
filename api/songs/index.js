@@ -1,7 +1,7 @@
 import { getSupabaseAdmin } from '../../lib/supabase.js'
 import { readSessionFromCookies } from '../../lib/session.js'
 
-const FIELDS = ['song', 'artist', 'genre', 'notes']
+const FIELDS = ['song', 'artist', 'genre', 'mood', 'language']
 const MAX_FIELD_LEN = 500
 const MAX_IMPORT_ROWS = 5000
 
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const { data, error } = await supabase
       .from('songs')
-      .select('id, song, artist, genre, notes, added_at')
+      .select('id, song, artist, genre, mood, language, added_at')
       .order('added_at', { ascending: false })
 
     if (error) {
@@ -30,7 +30,8 @@ export default async function handler(req, res) {
       song: row.song ?? '',
       artist: row.artist ?? '',
       genre: row.genre ?? '',
-      notes: row.notes ?? '',
+      mood: row.mood ?? '',
+      language: row.language ?? '',
       added_at: row.added_at,
     }))
 
@@ -61,7 +62,7 @@ export default async function handler(req, res) {
     const { data, error } = await supabase
       .from('songs')
       .insert(insert)
-      .select('id, song, artist, genre, notes, added_at')
+      .select('id, song, artist, genre, mood, language, added_at')
       .maybeSingle()
 
     if (error) {
@@ -78,7 +79,8 @@ export default async function handler(req, res) {
         song: data.song ?? '',
         artist: data.artist ?? '',
         genre: data.genre ?? '',
-        notes: data.notes ?? '',
+        mood: data.mood ?? '',
+        language: data.language ?? '',
         added_at: data.added_at,
       },
     })
@@ -134,7 +136,7 @@ export default async function handler(req, res) {
       const { data, error: insErr } = await supabase
         .from('songs')
         .insert(inserts)
-        .select('id, song, artist, genre, notes, added_at')
+        .select('id, song, artist, genre, mood, language, added_at')
       if (insErr) {
         console.error('songs replace insert error', insErr)
         return res.status(500).json({ error: 'Failed to import songs' })
@@ -148,7 +150,8 @@ export default async function handler(req, res) {
         song: row.song ?? '',
         artist: row.artist ?? '',
         genre: row.genre ?? '',
-        notes: row.notes ?? '',
+        mood: row.mood ?? '',
+        language: row.language ?? '',
         added_at: row.added_at,
       }))
       .sort((a, b) => (a.added_at < b.added_at ? 1 : -1))

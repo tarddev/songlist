@@ -176,7 +176,7 @@ function AppShell() {
                 <span className="search-icon">⌕</span>
                 <input
                   type="search"
-                  placeholder="Search songs, artists, genres…"
+                  placeholder="Search songs, artists, genres, moods, languages…"
                   value={globalFilter}
                   onChange={(e) => setGlobalFilter(e.target.value)}
                   className="search-input"

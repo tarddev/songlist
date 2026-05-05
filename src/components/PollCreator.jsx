@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const EMPTY_OPTION = { song: '', artist: '', genre: '', notes: '' }
+const EMPTY_OPTION = { song: '', artist: '', genre: '', mood: '', language: '' }
 
 const CLOSES_PRESETS = [
   { label: '+1h',  ms: 60 * 60 * 1000 },
@@ -55,9 +55,10 @@ export default function PollCreator({ onCreated }) {
       song: o.song.trim(),
       artist: o.artist.trim(),
       genre: o.genre.trim(),
-      notes: o.notes.trim(),
+      mood: o.mood.trim(),
+      language: o.language.trim(),
     }))
-    const empty = cleaned.findIndex((o) => !o.song && !o.artist && !o.genre && !o.notes)
+    const empty = cleaned.findIndex((o) => !o.song && !o.artist && !o.genre && !o.mood && !o.language)
     if (empty !== -1) {
       setError(`Option ${empty + 1} needs at least one field`)
       return
@@ -158,9 +159,17 @@ export default function PollCreator({ onCreated }) {
               <input
                 type="text"
                 className="search-input"
-                placeholder="Notes"
-                value={opt.notes}
-                onChange={(e) => updateOption(i, 'notes', e.target.value)}
+                placeholder="Mood"
+                value={opt.mood}
+                onChange={(e) => updateOption(i, 'mood', e.target.value)}
+                disabled={submitting}
+              />
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Language"
+                value={opt.language}
+                onChange={(e) => updateOption(i, 'language', e.target.value)}
                 disabled={submitting}
               />
             </div>

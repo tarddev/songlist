@@ -391,7 +391,7 @@ tbody tr:hover td {
   white-space: nowrap;
 }
 
-.notes-cell {
+.meta-cell {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
@@ -573,7 +573,7 @@ tbody tr:hover td {
   align-items: center;
 }
 
-.poll-tally-notes {
+.poll-tally-meta {
   color: var(--text-muted);
   font-size: 0.85rem;
 }
@@ -877,6 +877,68 @@ td.song-actions-cell {
 .btn-danger:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.btn-sm {
+  padding: 0.2rem 0.55rem;
+  font-size: 0.78rem;
+}
+
+.poll-vote-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.nomination-badge {
+  margin-left: 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 0 0.3rem;
+  vertical-align: middle;
+}
+
+.poll-tally-top-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.nominate-section {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nominate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.nominations-full {
+  margin-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.success-msg {
+  color: #4ade80;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 
 @keyframes modal-fade-in {

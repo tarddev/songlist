@@ -6,12 +6,14 @@ create table if not exists public.songs (
   song text,
   artist text,
   genre text,
-  notes text,
+  mood text,
+  language text,
   poll_id uuid references public.polls(id) on delete set null,
   added_at timestamptz not null default now(),
   constraint songs_at_least_one_field check (
     coalesce(nullif(btrim(song), ''), nullif(btrim(artist), ''),
-             nullif(btrim(genre), ''), nullif(btrim(notes), '')) is not null
+             nullif(btrim(genre), ''), nullif(btrim(mood), ''),
+             nullif(btrim(language), '')) is not null
   )
 );
 
@@ -49,7 +51,7 @@ begin
     return new;
   end if;
 
-  select song, artist, genre, notes into v_opt
+  select song, artist, genre, mood, language into v_opt
   from public.poll_options
   where poll_id = new.id and option_index = v_winner_index;
 
@@ -57,8 +59,8 @@ begin
     return new;
   end if;
 
-  insert into public.songs (poll_id, song, artist, genre, notes)
-  values (new.id, v_opt.song, v_opt.artist, v_opt.genre, v_opt.notes)
+  insert into public.songs (poll_id, song, artist, genre, mood, language)
+  values (new.id, v_opt.song, v_opt.artist, v_opt.genre, v_opt.mood, v_opt.language)
   on conflict (poll_id) where poll_id is not null do nothing;
 
   return new;
@@ -73,15 +75,8 @@ create trigger polls_after_close
   execute function public.handle_poll_close();
 
 -- ── Seed: existing CSV rows so the homepage isn't empty on launch ──────────
-insert into public.songs (song, artist, genre, notes)
+insert into public.songs (song, artist, genre, mood, language)
 select * from (values
-  ('Night Bloom',     'Kaneko Lumi',                                                           'Pop',  'Lemon'),
-  ('Love Sucker',     'Kaneko Lumi, Jelly Hoshiumi',                                           'Rock', null),
-  ('Pick Me Fever',   'Invaders WISH',                                                         'Rap',  null),
-  ('Space Drive',     'Ember Amane',                                                           'Pop',  'Emburger'),
-  ('Aino Protocol',   'Jelly Hoshiumi',                                                        null,   null),
-  ('Haunt',           'Dizzy Dokuro',                                                          null,   null),
-  ('Acid Rain',       'Invaders WISH, Kaneko Lumi, Dizzy Dokuro, Ember Amane, Jelly Hoshiumi', null,   null),
-  ('Magnolia',        'Ember Amane, Dizzy Dokuro',                                             null,   null)
-) as v(song, artist, genre, notes)
+  ('Night Bloom', 'Kaneko Lumi', 'Pop',  'Sad', 'English')
+) as v(song, artist, genre, mood, language)
 where not exists (select 1 from public.songs);

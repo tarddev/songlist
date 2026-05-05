@@ -1,7 +1,7 @@
 import { getSupabaseAdmin } from '../../lib/supabase.js'
 import { readSessionFromCookies } from '../../lib/session.js'
 
-const FIELDS = ['song', 'artist', 'genre', 'notes']
+const FIELDS = ['song', 'artist', 'genre', 'mood', 'language']
 const MAX_FIELD_LEN = 500
 
 function normalizeField(v) {
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
       .from('songs')
       .update(update)
       .eq('id', id)
-      .select('id, song, artist, genre, notes, added_at')
+      .select('id, song, artist, genre, mood, language, added_at')
       .maybeSingle()
 
     if (error) {
@@ -75,7 +75,8 @@ export default async function handler(req, res) {
         song: data.song ?? '',
         artist: data.artist ?? '',
         genre: data.genre ?? '',
-        notes: data.notes ?? '',
+        mood: data.mood ?? '',
+        language: data.language ?? '',
         added_at: data.added_at,
       },
     })
